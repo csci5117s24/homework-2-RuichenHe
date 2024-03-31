@@ -57,6 +57,18 @@ app.http('updateTODO', {
             const client = await mongoClient.connect(process.env.AZURE_MONGO_DB)
             // this could not possibly be the fast way to do things.
             const result = await client.db("test").collection("todos").updateOne({_id: new ObjectId(id)}, {$set: {title, description, status, category}})
+            
+
+            //Update category collections based on category input
+            const existingCategories = await client.db("test").collection("categories").find({name: {$in: category}}).toArray();
+            const existingCategoriesNames = existingCategories.map(cat => cat.name);
+            const newCategories = category.filter(cat => !existingCategoriesNames.includes(cat))
+
+            if (newCategories.length > 0){
+                const newCategoriesDocs = newCategories.map(name => ({name}));
+                await client.db("test").collection("categories").insertMany(newCategoriesDocs);
+            }
+
             client.close();
             if (result.matchedCount > 0) {
                 return {
@@ -169,5 +181,33 @@ app.http('deleteCategory', {
                 jsonBody: {message: `Failed`}
             };
         }
+    },
+});
+
+app.http('getTODOsByCategory', {
+    methods: ['GET'],
+    authLevel: 'anonymous',
+    route: 'todos/{category}',
+    handler: async (request, context) => {
+        const client = await mongoClient.connect(process.env.AZURE_MONGO_DB);
+        const category = request.params.category;
+
+        //FIrst delete the category from the collection
+        const todos = await client.db("test").collection("todos").find({ category: category}).toArray();
+
+        client.close()
+
+        if (todos.length > 0){
+            return {
+                statis: 200,
+                jsonBody: {data: todos}
+            };
+        } else {
+            return {
+                statis: 404,
+                jsonBody: {message: "No todo items found under that category"}
+            };
+        }
+        
     },
 });
