@@ -4,7 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
-
+/api/node_modules
+/api/local.settings.json
 # testing
 /coverage
 
