@@ -4,10 +4,32 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import { Todo_Page } from './routes/Todo_page'
+import { TODO_detail } from './routes/Todo_detail'
+import { Done_Page } from './routes/Done_page'
+// create the router -- paths are configured here
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App/>,
+    children: [
+      Todo_Page,
+      TODO_detail,
+      Done_Page
+    ],
+    errorElement: <span>oops</span>
+  },
+  
+]);
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
