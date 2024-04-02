@@ -1,3 +1,4 @@
+
 const { app } = require('@azure/functions');
 const { ObjectId } = require('mongodb');
 const mongoClient = require("mongodb").MongoClient;
@@ -99,15 +100,15 @@ app.http('newTODO', {
         const payload = {title, description, status, category}
         const result = await client.db("test").collection("todos").insertOne(payload)
 
-        //Update category collections based on category input
-        const existingCategories = await client.db("test").collection("categories").find({name: {$in: category}}).toArray();
-        const existingCategoriesNames = existingCategories.map(cat => cat.name);
-        const newCategories = category.filter(cat => !existingCategoriesNames.includes(cat))
+        // //Update category collections based on category input
+        // const existingCategories = await client.db("test").collection("categories").find({name: {$in: category}}).toArray();
+        // const existingCategoriesNames = existingCategories.map(cat => cat.name);
+        // const newCategories = category.filter(cat => !existingCategoriesNames.includes(cat))
 
-        if (newCategories.length > 0){
-            const newCategoriesDocs = newCategories.map(name => ({name}));
-            await client.db("test").collection("categories").insertMany(newCategoriesDocs);
-        }
+        // if (newCategories.length > 0){
+        //     const newCategoriesDocs = newCategories.map(name => ({name}));
+        //     await client.db("test").collection("categories").insertMany(newCategoriesDocs);
+        // }
 
 
         client.close();
@@ -141,7 +142,25 @@ app.http('newCategory', {
 
         const body = await request.json();
         // skipping validation -- but I can at least do some basic defaulting, and only grab the things I want.
-        const name = body.name ?? "no name"
+        const name = body.name?.trim();
+
+        // Check for an empty or undefined name
+        if (!name) {
+            client.close();
+            return {
+                status: 400, // Bad Request
+                jsonBody: { error: "Category name is required." }
+            };
+        }
+        const existingCategory = await client.db("test").collection("categories").findOne({ name: name });
+        if (existingCategory) {
+            client.close();
+            return {
+                status: 409, // Conflict
+                jsonBody: { error: "A category with this name already exists." }
+            };
+        }
+        
         const payload = {name}
         const result = await client.db("test").collection("categories").insertOne(payload)
 
@@ -211,3 +230,29 @@ app.http('getTODOsByCategory', {
         
     },
 });
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+app.http('flipCoin', {
+    methods: ['POST'],
+    authLevel: 'anonymous',
+    route: 'coin',
+    handler: async (request, context) => {
+        sleep(1000);
+        if (Math.random() > 0.5){
+            return {
+                statis: 200,
+                jsonBody: {data: "face"}
+            };
+        } else {
+            return {
+                statis: 500,
+                jsonBody: {data: "tail"}
+            };
+        }
+    },
+    
+});
+
