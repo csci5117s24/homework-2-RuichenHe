@@ -2,6 +2,15 @@
   text-align: center;
 }
 
+.home-head {
+  background-color: #f2f2f2; /* Light grey background */
+  padding: 20px; /* Spacing inside the box */
+  border-radius: 15px; /* Rounded corners */
+  text-align: center; /* Center-align the text */
+  display: inline-block; /* Make the h1 width only as wide as its content */
+  margin: 20px; /* Margin around the h1 for some spacing */
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

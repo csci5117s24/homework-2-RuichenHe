@@ -11,6 +11,8 @@ import {
 import { Todo_Page } from './routes/Todo_page'
 import { TODO_detail } from './routes/Todo_detail'
 import { Done_Page } from './routes/Done_page'
+import { Todo_Filtered_Page } from './routes/Todo_filter'
+import { Done_Filtered_Page } from './routes/Done_filter'
 // create the router -- paths are configured here
 const router = createBrowserRouter([
   {
@@ -19,7 +21,9 @@ const router = createBrowserRouter([
     children: [
       Todo_Page,
       TODO_detail,
-      Done_Page
+      Done_Page,
+      Todo_Filtered_Page,
+      Done_Filtered_Page
     ],
     errorElement: <span>oops</span>
   },
