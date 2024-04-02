@@ -21,7 +21,7 @@ function App() {
           </div>
         </div>
       </div>
-      <a href="/.auth/login/github?post_login_redirect_uri=/todos">Login</a>
+      <a href="/.auth/login/github?post_login_redirect_uri=https://gray-smoke-04f9f560f.5.azurestaticapps.net/todos">Login</a>
       <Outlet />
     </div>
   );
