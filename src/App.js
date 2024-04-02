@@ -21,6 +21,7 @@ function App() {
         </div>
       </div>
       <a href="/.auth/login/github?post_login_redirect_uri=/todos">Login</a>
+      <a href='/.auth/logout'>Log out</a>
       <Outlet />
     </div>
   );
