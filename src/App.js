@@ -9,7 +9,6 @@ function App() {
     <div className="App">
       <div className="top-bar">
         <div className='home-head'>
-          <a href="/.auth/login/github">Login</a>
           <Link to="/todos">Ruichen's TODO List</Link>
         </div>
         <div className='bottom-buttons'>
@@ -21,7 +20,7 @@ function App() {
           </div>
         </div>
       </div>
-      <a href="/.auth/login/github?post_login_redirect_uri=https://gray-smoke-04f9f560f.5.azurestaticapps.net/todos">Login</a>
+      <a href="/.auth/login/github?post_login_redirect_uri=/todos">Login</a>
       <Outlet />
     </div>
   );
