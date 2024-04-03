@@ -89,7 +89,7 @@ function App() {
               const todoItem = await response.json(); // Parse the JSON response body
               console.log(todoItem.todo.title); // Log the todo item for debugging
               console.log(newStatus);
-              const newTODOItem = {title: todoItem.todo.title, description: todoItem.todo.description, isDone: newStatus, category: todoItem.todo.category, userID: todoItem.todo.userID}
+              const newTODOItem = {title: todoItem.todo.title, description: todoItem.todo.description, isDone: newStatus, category: todoItem.todo.category, userID: todoItem.todo.userid}
               fetch("/api/todo/"+todoid, {
                   method: "PUT",
                   headers: {
