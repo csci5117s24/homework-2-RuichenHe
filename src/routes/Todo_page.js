@@ -124,7 +124,7 @@ function App() {
       headers: {
           "Content-Type": "application/json",
       },
-      body: JSON.stringify({name})
+      body: JSON.stringify({name: name, userID: userInfo.userId})
     })
     if (result.ok) {
       if (todos){
@@ -151,7 +151,7 @@ function App() {
               const todoItem = await response.json(); // Parse the JSON response body
               console.log(todoItem.todo.title); // Log the todo item for debugging
               console.log(newStatus);
-              const newTODOItem = {title: todoItem.todo.title, description: todoItem.todo.description, isDone: newStatus, category: todoItem.todo.category}
+              const newTODOItem = {title: todoItem.todo.title, description: todoItem.todo.description, isDone: newStatus, category: todoItem.todo.category, userID: todoItem.todo.userID}
               fetch("/api/todo/"+todoid, {
                   method: "PUT",
                   headers: {
@@ -210,7 +210,7 @@ function App() {
               TODO:
             </h1>
             {notification.visible && <div className="notification">{notification.message}</div>}
-            {todos && todos.filter(todo => todo.status === "todo").map(todo => <TodoItem key={todo.title} todo={todo} onStatusChange={handleStatusChange}></TodoItem>)}
+            {todos && todos.filter(todo => todo.status === "todo").filter(todo => todo.userId === userInfo.userId).map(todo => <TodoItem key={todo.title} todo={todo} onStatusChange={handleStatusChange}></TodoItem>)}
         </div>
       </div>
     </div>
