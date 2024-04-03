@@ -3,11 +3,10 @@ import { useLoaderData } from 'react-router-dom';
 import TodoItem from '../common/TodoItem';
 import CategoryItem from '../common/CategoryItem';
 import '../common/style.css';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import UserInfoContext from '../UserInfoContext';
 
-async function loader({ request }) {
-    const userInfo = useContext(UserInfoContext);
+async function loader({ request, userInfo}) {
     const todoRequest = fetch("/api/todos", {
         signal: request.signal,
         method: "GET",
@@ -46,6 +45,9 @@ function App() {
   const [newTODOCategory, setNewTODOCategory] = useState("");
   const status = "todo";
   const userInfo = useContext(UserInfoContext);
+    useEffect(() => {
+      loader({ userInfo });
+    }, [userInfo]);
   console.log(userInfo.userId);
 
   async function newTodo() {
