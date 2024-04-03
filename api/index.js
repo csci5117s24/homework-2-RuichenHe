@@ -55,10 +55,12 @@ app.http('updateTODO', {
         const description = body.description ?? "no description"
         const status = body.isDone ?? "todo"
         const category = body.category ?? []
+        const userid = body.userID ?? ""
+        
         if (ObjectId.isValid(id)) {
             const client = await mongoClient.connect(process.env.AZURE_MONGO_DB)
             // this could not possibly be the fast way to do things.
-            const result = await client.db("test").collection("todos").updateOne({_id: new ObjectId(id)}, {$set: {title, description, status, category}})
+            const result = await client.db("test").collection("todos").updateOne({_id: new ObjectId(id)}, {$set: {title, description, status, category, userid}})
             
 
             //Update category collections based on category input
@@ -98,7 +100,8 @@ app.http('newTODO', {
         const description = body.description ?? "no description"
         const status = body.isDone ?? "todo"
         const category = body.category ?? []
-        const payload = {title, description, status, category}
+        const userid = body.userID ?? ""
+        const payload = {title, description, status, category, userid}
         const result = await client.db("test").collection("todos").insertOne(payload)
 
         // //Update category collections based on category input
