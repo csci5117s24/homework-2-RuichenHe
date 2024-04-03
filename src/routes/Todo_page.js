@@ -38,7 +38,7 @@ function App() {
   const [newTODOCategory, setNewTODOCategory] = useState("");
   const status = "todo";
   const userInfo = useContext(UserInfoContext);
-  console.log(userInfo);
+  console.log(userInfo.userId);
 
   async function newTodo() {
     setAddTodoButtonName("Waiting");
