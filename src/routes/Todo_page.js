@@ -3,6 +3,8 @@ import { useLoaderData } from 'react-router-dom';
 import TodoItem from '../common/TodoItem';
 import CategoryItem from '../common/CategoryItem';
 import '../common/style.css';
+import React, { useContext } from 'react';
+import UserInfoContext from '../UserInfoContext';
 async function loader({ request }) {
     const todoRequest = fetch("/api/todos", {
         signal: request.signal,
@@ -35,6 +37,8 @@ function App() {
   // eslint-disable-next-line
   const [newTODOCategory, setNewTODOCategory] = useState("");
   const status = "todo";
+  const userInfo = useContext(UserInfoContext);
+  console.log(userInfo);
 
   async function newTodo() {
     setAddTodoButtonName("Waiting");

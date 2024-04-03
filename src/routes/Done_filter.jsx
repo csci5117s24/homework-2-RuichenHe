@@ -24,7 +24,7 @@ function App() {
   const [todos, setTODOs] = useState(todosList.data);
   console.log("Category");
   console.log(category);
-
+  
   const handleStatusChange = async (todoid, newStatus) => {
       try {
           const url = "/api/todo/" + todoid;

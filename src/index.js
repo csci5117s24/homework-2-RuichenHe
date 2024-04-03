@@ -13,6 +13,7 @@ import { TODO_detail } from './routes/Todo_detail'
 import { Done_Page } from './routes/Done_page'
 import { Todo_Filtered_Page } from './routes/Todo_filter'
 import { Done_Filtered_Page } from './routes/Done_filter'
+import UserInfoProvider from './UserInfoProvider';
 // create the router -- paths are configured here
 const router = createBrowserRouter([
   {
@@ -33,7 +34,9 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <UserInfoProvider>
+      <RouterProvider router={router} />
+    </UserInfoProvider>
   </React.StrictMode>
 );
 
