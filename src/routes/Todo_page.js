@@ -210,7 +210,7 @@ function App() {
               TODO:
             </h1>
             {notification.visible && <div className="notification">{notification.message}</div>}
-            {todos && todos.filter(todo => todo.status === "todo").filter(todo => todo.userId === userInfo.userId).map(todo => <TodoItem key={todo.title} todo={todo} onStatusChange={handleStatusChange}></TodoItem>)}
+            {todos && todos.filter(todo => todo.status === "todo").filter(todo => todo.userid === userInfo.userId).map(todo => <TodoItem key={todo.title} todo={todo} onStatusChange={handleStatusChange}></TodoItem>)}
         </div>
       </div>
     </div>
