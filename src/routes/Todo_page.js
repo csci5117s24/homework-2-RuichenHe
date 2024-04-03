@@ -4,7 +4,7 @@ import CategoryItem from '../common/CategoryItem';
 import '../common/style.css';
 import React, { useContext } from 'react';
 import UserInfoContext from '../UserInfoContext';
-
+import { useLoaderData } from 'react-router-dom';
 async function loader({ request }) {
     const todoRequest = fetch("/api/todos", {
         signal: request.signal,
