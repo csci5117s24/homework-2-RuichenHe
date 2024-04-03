@@ -182,7 +182,7 @@ function App() {
           <h1>
             Category:
           </h1>
-          {categories && categories.map(category => <CategoryItem key={category.name} category={category} rootname="/todos/"></CategoryItem>)}
+          {categories && categories.filter(category => category.userid === userInfo.userId).map(category => <CategoryItem key={category.name} category={category} rootname="/todos/"></CategoryItem>)}
         </div>
         <div className="todo-section">
           <div className="todo-form">
@@ -198,7 +198,7 @@ function App() {
               ></textarea>
               <select value = {newTODOCategory} onChange={e=>setNewTODOCategory(e.target.value)}>
                 <option value="">Select a category</option>
-                {categories.map((category) => (
+                {categories.filter(category => category.userid === userInfo.userId).map((category) => (
                   <option key={category.id} value={category.name}>
                     {category.name}
                   </option>
