@@ -1,6 +1,8 @@
 import { useLoaderData } from 'react-router-dom';
 import { useState } from 'react';
 import '../common/style.css';
+import UserInfoContext from '../UserInfoContext';
+import { useLoaderData } from 'react-router-dom';
 async function loader({ request, params }) {
   const { id } = params;
 
@@ -31,6 +33,7 @@ function TodoDetail() {
   const [newCategory, setNewCategory] = useState(todoDetail.todo.category[0] || "");
   const [updateButtonName, setUpdateButtonName] = useState("Update")
   const [notification, setNotification] = useState({ message: '', visible: false, nf_type: "notification-success"});
+  const userInfo = useContext(UserInfoContext);
   async function updateTODOItem() {
     setUpdateButtonName("Waiting");
     if (newTitle.trim() === "") {
@@ -54,6 +57,7 @@ function TodoDetail() {
       title: newTitle, 
       description: newDescription, 
       isDone: newStatus, 
+      userID: userInfo.userId,
       category: newCategory.trim() === "" ? [] : [newCategory]
     }
     setNewTitle(newTitle)

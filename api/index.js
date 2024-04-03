@@ -63,15 +63,15 @@ app.http('updateTODO', {
             const result = await client.db("test").collection("todos").updateOne({_id: new ObjectId(id)}, {$set: {title, description, status, category, userid}})
             
 
-            //Update category collections based on category input
-            const existingCategories = await client.db("test").collection("categories").find({name: {$in: category}}).toArray();
-            const existingCategoriesNames = existingCategories.map(cat => cat.name);
-            const newCategories = category.filter(cat => !existingCategoriesNames.includes(cat))
+            // //Update category collections based on category input
+            // const existingCategories = await client.db("test").collection("categories").find({name: {$in: category}}).toArray();
+            // const existingCategoriesNames = existingCategories.map(cat => cat.name);
+            // const newCategories = category.filter(cat => !existingCategoriesNames.includes(cat))
 
-            if (newCategories.length > 0){
-                const newCategoriesDocs = newCategories.map(name => ({name}));
-                await client.db("test").collection("categories").insertMany(newCategoriesDocs);
-            }
+            // if (newCategories.length > 0){
+            //     const newCategoriesDocs = newCategories.map(name => ({name}));
+            //     await client.db("test").collection("categories").insertMany(newCategoriesDocs);
+            // }
 
             client.close();
             if (result.matchedCount > 0) {
