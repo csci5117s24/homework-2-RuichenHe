@@ -118,7 +118,7 @@ app.http('newTODO', {
         client.close();
         return{
             status: 201, /* Defaults to 200 */
-            jsonBody: {_id: result.insertedId, title, description, status, category}
+            jsonBody: {_id: result.insertedId, title, description, status, category, userid}
         };
     },
 });
