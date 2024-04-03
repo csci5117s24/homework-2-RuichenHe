@@ -29,11 +29,20 @@ function TodoDetail() {
   const {todoDetail, categorydata}  = useLoaderData();
   const [newTitle, setNewTitle] = useState(todoDetail.todo.title);
   const [newDescription, setNewDescription] = useState(todoDetail.todo.description);
+  const [editStatus, setEditStatus] = useState("false");
   const [newStatus, setNewStatus] = useState(todoDetail.todo.status);
   const [newCategory, setNewCategory] = useState(todoDetail.todo.category[0] || "");
   const [updateButtonName, setUpdateButtonName] = useState("Update")
   const [notification, setNotification] = useState({ message: '', visible: false, nf_type: "notification-success"});
   const userInfo = useContext(UserInfoContext);
+  async function changeEditStatus(){
+    console.log("Switch edit status");
+    if (editStatus === "false"){
+      setEditStatus("true");
+    } else {
+      setEditStatus("false");
+    }
+  }
   async function updateTODOItem() {
     setUpdateButtonName("Waiting");
     if (newTitle.trim() === "") {
@@ -121,12 +130,14 @@ function TodoDetail() {
       
       <div className="status-container">
           <span className={`status-indicator ${newStatus}`}>Status: {newStatus}</span>
+          {editStatus === "true" &&
           <button onClick={updateStatus} className={`status-btn ${newStatus}`} aria-label={newStatus === "done" ? "Mark as Todo" : "Mark as Done"}>
               {newStatus === "done" ? <i className="fas fa-undo"></i> : <i className="fas fa-check"></i>}
               {newStatus === "done" ? "Undo" : "Finish"}
-          </button>
+          </button>}
       </div>
-        <button onClick={updateTODOItem}>{updateButtonName}</button>
+        {editStatus === "true" && <button onClick={updateTODOItem}>{updateButtonName}</button>}
+        {editStatus === "false" ? <button onClick={changeEditStatus}>Edit</button> : <button onClick={changeEditStatus}>Cancel</button>}
         {notification.visible && <div className={notification.nf_type}>{notification.message}</div>}
       </div>
     </div>
