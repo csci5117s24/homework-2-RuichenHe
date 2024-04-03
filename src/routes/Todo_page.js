@@ -2,10 +2,10 @@ import { useState } from 'react';
 import TodoItem from '../common/TodoItem';
 import CategoryItem from '../common/CategoryItem';
 import '../common/style.css';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import UserInfoContext from '../UserInfoContext';
 
-async function loader({ request, userInfo}) {
+async function loader({ request }) {
     const todoRequest = fetch("/api/todos", {
         signal: request.signal,
         method: "GET",
@@ -33,23 +33,10 @@ async function loader({ request, userInfo}) {
 
 function App() {
   // eslint-disable-next-line
+  const {tododata, categorydata} = useLoaderData();
   const userInfo = useContext(UserInfoContext);
-  const [tododata, setTododata] = useState(null);
-  const [categorydata, setCategorydata] = useState(null);
   console.log(userInfo.userId);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (userInfo) {
-        const { tododata, categorydata } = await loader({ userInfo });
-
-        setTododata(tododata);
-        setCategorydata(categorydata);
-      }
-    };
-
-    fetchData();
-  }, [userInfo]);
 
   const [todos, setTODOs] = useState(tododata.data);
   const [title, setTitle] = useState("");

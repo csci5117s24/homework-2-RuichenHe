@@ -10,9 +10,7 @@ app.http('getTODOs', {
     route: 'todos',
     handler: async (request, context) => {
         const client = await mongoClient.connect(process.env.AZURE_MONGO_DB)
-        const userId = request.headers['userid'];
-        const collectionName = `${userId}-todos`;
-        const todos = await client.db("test").collection("collectionName").find({}).toArray()
+        const todos = await client.db("test").collection("todos").find({}).toArray()
         client.close();
         return {
             jsonBody: {data: todos}
