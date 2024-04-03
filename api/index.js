@@ -156,7 +156,8 @@ app.http('newCategory', {
                 jsonBody: { error: "Category name is required." }
             };
         }
-        const existingCategory = await client.db("test").collection("categories").findOne({ name: name, user});
+        const userid = body.userID ?? ""
+        const existingCategory = await client.db("test").collection("categories").findOne({ name: name, userid: userid});
         if (existingCategory) {
             client.close();
             return {
@@ -164,14 +165,13 @@ app.http('newCategory', {
                 jsonBody: { error: "A category with this name already exists." }
             };
         }
-        const userid = body.userID ?? ""
         const payload = {name, userid}
         const result = await client.db("test").collection("categories").insertOne(payload)
 
         client.close();
         return{
             status: 201, /* Defaults to 200 */
-            jsonBody: {_id: result.insertedId, name}
+            jsonBody: {_id: result.insertedId, name, userid}
         };
     },
 });

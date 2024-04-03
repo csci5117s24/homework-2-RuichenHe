@@ -127,7 +127,7 @@ function App() {
       body: JSON.stringify({name: name, userID: userInfo.userId})
     })
     if (result.ok) {
-      if (todos){
+      if (categories){
         setCategories([...categories, await result.json()]);
       } else {
         setCategories([await result.json()]);
