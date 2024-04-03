@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useLoaderData } from 'react-router-dom';
 import TodoItem from '../common/TodoItem';
 import CategoryItem from '../common/CategoryItem';
 import '../common/style.css';
@@ -35,7 +34,24 @@ async function loader({ request, userInfo}) {
 
 function App() {
   // eslint-disable-next-line
-  const {tododata, categorydata} = useLoaderData();
+  const userInfo = useContext(UserInfoContext);
+  const [tododata, setTododata] = useState(null);
+  const [categorydata, setCategorydata] = useState(null);
+  console.log(userInfo.userId);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (userInfo) {
+        const { tododata, categorydata } = await loader({ userInfo });
+
+        setTododata(tododata);
+        setCategorydata(categorydata);
+      }
+    };
+
+    fetchData();
+  }, [userInfo]);
+
   const [todos, setTODOs] = useState(tododata.data);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -45,11 +61,7 @@ function App() {
   // eslint-disable-next-line
   const [newTODOCategory, setNewTODOCategory] = useState("");
   const status = "todo";
-  const userInfo = useContext(UserInfoContext);
-    useEffect(() => {
-      loader({ userInfo });
-    }, [userInfo]);
-  console.log(userInfo.userId);
+  
 
   async function newTodo() {
     setAddTodoButtonName("Waiting");
