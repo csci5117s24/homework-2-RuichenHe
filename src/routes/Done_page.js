@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import TodoItem from '../common/TodoItem';
 import CategoryItem from '../common/CategoryItem';
+
+import UserInfoContext from '../UserInfoContext';
+import React, { useContext } from 'react';
 async function loader({ request }) {
     const todoRequest = fetch("/api/todos", {
         signal: request.signal,
@@ -28,6 +31,7 @@ function App() {
   const [todos, setTODOs] = useState(tododata.data);
   // eslint-disable-next-line
   const [categories, setCategories] = useState(categorydata.data);
+  const userInfo = useContext(UserInfoContext);
   const handleStatusChange = async (todoid, newStatus) => {
     try {
         const url = "/api/todo/" + todoid;
@@ -41,7 +45,7 @@ function App() {
             const todoItem = await response.json(); // Parse the JSON response body
             console.log(todoItem.todo.title); // Log the todo item for debugging
             console.log(newStatus);
-            const newTODOItem = {title: todoItem.todo.title, description: todoItem.todo.description, isDone: newStatus, category: todoItem.todo.category}
+            const newTODOItem = {title: todoItem.todo.title, description: todoItem.todo.description, isDone: newStatus, category: todoItem.todo.category, userID: todoItem.todo.userID}
             fetch("/api/todo/"+todoid, {
                 method: "PUT",
                 headers: {
@@ -65,13 +69,13 @@ function App() {
           <h1>
             Category:
           </h1>
-          {categories && categories.map(category => <CategoryItem key={category.name} category={category} rootname="/done/"></CategoryItem>)}
+          {categories && categories.filter(category => category.userid === userInfo.userId).map(category => <CategoryItem key={category.name} category={category} rootname="/done/"></CategoryItem>)}
         </div>
         <div className="todo-section">
             <h1>
               DONE:
             </h1>
-            {todos && todos.filter(todo => todo.status === "done").map(todo => <TodoItem key={todo.title} todo={todo} onStatusChange={handleStatusChange}></TodoItem>)}
+            {todos && todos.filter(todo => todo.userid === userInfo.userId).filter(todo => todo.status === "done").map(todo => <TodoItem key={todo.title} todo={todo} onStatusChange={handleStatusChange}></TodoItem>)}
         </div>
       </div>
     </div>

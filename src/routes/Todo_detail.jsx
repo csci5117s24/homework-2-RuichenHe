@@ -111,7 +111,7 @@ function TodoDetail() {
       <label htmlFor="categoryTextarea" className="form-label">Category:</label>
         <select value = {newCategory} onChange={e=>setNewCategory(e.target.value)} >
             <option value="">Select a category</option>
-            {categorydata.data.map((category) => (
+            {categorydata.data.filter(category => category.userid === userInfo.userId).map((category) => (
               <option key={category.id} value={category.name}>
                 {category.name}
               </option>
