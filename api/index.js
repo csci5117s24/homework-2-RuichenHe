@@ -12,9 +12,21 @@ app.http('getTODOs', {
         const client = await mongoClient.connect(process.env.AZURE_MONGO_DB)
         const todos = await client.db("test").collection("todos").find({}).toArray()
         client.close();
-        return {
-            jsonBody: {data: todos}
+        const auth_header = request.headers.get('X-MS-CLIENT-PRINCIPAL')
+        let token = null
+        if (auth_header) {
+            token = Buffer.from(auth_header, "base64");
+            token = JSON.parse(token.toString());
+            console.log(token.userId)
+            return {
+                jsonBody: {data: todos.filter(todo => todo.userid === token.userId)}
+            }
+        } else {
+            return {
+                jsonBody: {data: todos}
+            }
         }
+        
     },
 });
 
@@ -128,11 +140,21 @@ app.http('getCategories', {
     authLevel: 'anonymous',
     route: 'categories',
     handler: async (request, context) => {
+        const auth_header = request.headers.get('X-MS-CLIENT-PRINCIPAL')
+        let token = null
         const client = await mongoClient.connect(process.env.AZURE_MONGO_DB)
         const categories = await client.db("test").collection("categories").find({}).toArray()
         client.close();
-        return {
-            jsonBody: {data: categories}
+        if (auth_header) {
+            token = Buffer.from(auth_header, "base64");
+            token = JSON.parse(token.toString());
+            return {
+                jsonBody: {data: categories.filter(category => category.userid === token.userId)}
+            }
+        } else {
+            return {
+                jsonBody: {data: categories}
+            }
         }
     },
 });
@@ -216,15 +238,27 @@ app.http('getTODOsByCategory', {
         const category = request.params.category;
 
         //FIrst delete the category from the collection
+        const auth_header = request.headers.get('X-MS-CLIENT-PRINCIPAL')
+        let token = null
         const todos = await client.db("test").collection("todos").find({ category: category}).toArray();
 
         client.close()
 
         if (todos.length > 0){
-            return {
-                statis: 200,
-                jsonBody: {data: todos}
-            };
+            if (auth_header) {
+                token = Buffer.from(auth_header, "base64");
+                token = JSON.parse(token.toString());
+                return {
+                    statis: 200,
+                    jsonBody: {data: todos.filter(todo => todo.userid === token.userId)}
+                };
+            } else {
+                return {
+                    statis: 200,
+                    jsonBody: {data: todos}
+                };
+            }
+            
         } else {
             return {
                 statis: 404,
