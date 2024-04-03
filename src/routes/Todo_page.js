@@ -6,19 +6,18 @@ import React, { useContext, useEffect } from 'react';
 import UserInfoContext from '../UserInfoContext';
 
 async function loader({ request, userInfo}) {
-    console.log(userInfo);
     const todoRequest = fetch("/api/todos", {
         signal: request.signal,
         method: "GET",
         headers: {
-          'userid': userInfo.userId,
+          'userid': "",
         }
     });
     const categoryRequest = fetch("/api/categories", {
       signal: request.signal,
       method: "GET",
       headers: {
-        'userid': userInfo.userId,
+        'userid': "",
       }
     });
     const [result1, result2] = await Promise.all([todoRequest, categoryRequest]);
