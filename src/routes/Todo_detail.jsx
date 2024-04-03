@@ -2,7 +2,7 @@ import { useLoaderData } from 'react-router-dom';
 import { useState } from 'react';
 import '../common/style.css';
 import UserInfoContext from '../UserInfoContext';
-import { useLoaderData } from 'react-router-dom';
+import React, { useContext } from 'react';
 async function loader({ request, params }) {
   const { id } = params;
 
