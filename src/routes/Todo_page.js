@@ -7,6 +7,7 @@ import React, { useContext, useEffect } from 'react';
 import UserInfoContext from '../UserInfoContext';
 
 async function loader({ request, userInfo}) {
+    console.log(userInfo);
     const todoRequest = fetch("/api/todos", {
         signal: request.signal,
         method: "GET",
