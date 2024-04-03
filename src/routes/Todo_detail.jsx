@@ -41,6 +41,10 @@ function TodoDetail() {
       setEditStatus("true");
     } else {
       setEditStatus("false");
+      setNewTitle(todoDetail.todo.title);
+      setNewDescription(todoDetail.todo.description);
+      setNewStatus(todoDetail.todo.status);
+      setNewCategory(todoDetail.todo.category[0] || "");
     }
   }
   async function updateTODOItem() {
@@ -83,7 +87,7 @@ function TodoDetail() {
           setNotification({ message: '', visible: false, nf_type: "notification-success"});
       }, 3000);
     setUpdateButtonName("Update");
-    
+    setEditStatus("false");
   }
   async function updateStatus() {
     if (newStatus === "done"){
@@ -103,6 +107,8 @@ function TodoDetail() {
           value={newTitle} 
           placeholder="Enter title" 
           onChange={e => setNewTitle(e.target.value)}
+          className={editStatus === "true" ? 'editableInput' : 'uneditableInput'}
+          readOnly={editStatus !== "true"}
         />
       </div>
 
@@ -113,19 +119,22 @@ function TodoDetail() {
           value={newDescription}
           placeholder="Enter description" 
           onChange={e => setNewDescription(e.target.value)}
-          className="todo-description"
+          className={editStatus === "true" ? 'todo-description editableInput' : 'todo-description uneditableInput'}
+          readOnly={editStatus !== "true"}
         ></textarea>
       </div>
       <div className="category-group">
       <label htmlFor="categoryTextarea" className="form-label">Category:</label>
-        <select value = {newCategory} onChange={e=>setNewCategory(e.target.value)} >
+      { editStatus !== "true" && <label htmlFor="categoryTextarea" className="form-label">{newCategory}</label>}
+      { editStatus === "true" &&
+        <select value = {newCategory} onChange={e=>setNewCategory(e.target.value)} disabled={editStatus !== "true"} >
             <option value="">Select a category</option>
             {categorydata.data.filter(category => category.userid === userInfo.userId).map((category) => (
               <option key={category.id} value={category.name}>
                 {category.name}
               </option>
             ))}
-        </select>
+        </select>}
       </div>
       
       <div className="status-container">

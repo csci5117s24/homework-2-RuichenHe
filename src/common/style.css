@@ -335,3 +335,17 @@
 body {
   padding-top: 80px; /* Adjust this value based on the actual height of your top-bar */
 }
+
+/* styles.css */
+.editableInput {
+  background-color: white;
+  border: 1px solid black;
+  /* Other styles for edit mode */
+}
+
+.uneditableInput {
+  background-color: #f0f0f0; /* Light grey */
+  border: none;
+  cursor: pointer;
+  /* Other styles for unedited mode */
+}
