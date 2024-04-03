@@ -5,14 +5,21 @@ import CategoryItem from '../common/CategoryItem';
 import '../common/style.css';
 import React, { useContext } from 'react';
 import UserInfoContext from '../UserInfoContext';
+
 async function loader({ request }) {
     const todoRequest = fetch("/api/todos", {
         signal: request.signal,
         method: "GET",
+        headers: {
+          'userid': userInfo.userId,
+        }
     });
     const categoryRequest = fetch("/api/categories", {
       signal: request.signal,
       method: "GET",
+      headers: {
+        'userid': userInfo.userId,
+      }
     });
     const [result1, result2] = await Promise.all([todoRequest, categoryRequest]);
     if (result1.ok && result2.ok) {
@@ -62,6 +69,7 @@ function App() {
       title: title, 
       description: description, 
       status: status, 
+      userID: userInfo.userId,
       category: newTODOCategory.trim() === "" ? [] : [newTODOCategory]
     }
 
