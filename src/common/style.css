@@ -5,11 +5,15 @@
     margin: 10px auto 10px auto;
     background-color: #f9f9f9; /* Background color */
     width: 75%;
+    display: flex; /* Aligns the checkbox and link horizontally */
+    align-items: center; /* Centers them vertically */
 }
 
 .todo-link {
     text-decoration: none;
     color: black;
+    flex-grow: 1; /* Allows the link to take up the remaining space */
+    display: block; /* Makes the link behave like a block element, filling its container */
 }
 
 .category-item {
@@ -24,6 +28,10 @@
 .category-link {
     text-decoration: none;
     color: black;
+    display: block; /* Make the link fill its container */
+    height: 100%; /* Extend to the full height of its parent */
+    width: 100%; /* Extend to the full width of its parent */
+    text-align: center; /* Optional: center the text if desired */
 }
 
 .notification-success{
@@ -150,7 +158,6 @@
     justify-content: center; /* Center children horizontally */
     align-items: flex-start; /* Align children to the start of the cross axis */
     gap: 20px; /* Optional: Adds space between the two sections */
-    margin-top: 20px; 
   }
 
   .category-section, .todo-section {
@@ -247,15 +254,20 @@
 .status-indicator {
     padding: 5px 10px;
     border-radius: 5px;
+    font-size: 20px;
+    font-weight: bold;
     color: #fff;
 }
 
 .status-indicator.todo {
-    background-color: #777; /* Or any color you prefer for todo */
+  background-color: #ce796b;
+  color: #ecc8af;
 }
 
+
 .status-indicator.done {
-    background-color: #28a745; /* Or any color you prefer for done */
+  background-color: #588157;
+  color: #dad7cd;
 }
 
 .status-btn {
@@ -270,11 +282,13 @@
 }
 
 .status-btn.todo {
-    background-color: #6c757d; /* Or any color you prefer for todo button */
+  color: #4CAF50; /* Green text */
+  background-color: #C8E6C9; /* Light green background */
 }
 
 .status-btn.done {
-    background-color: #28a745; /* Or any color you prefer for done button */
+  color: #d8000c;
+  background-color: #ffbaba;
 }
 
 /* Add hover effects */
@@ -289,6 +303,10 @@
   background-color: #C8E6C9; /* Light green background */
   padding: 10px; /* Padding around the text */
   border-radius: 5px; /* Rounded corners */
+}
+
+.nodecoration{
+  text-decoration: none; /* No underline */
 }
 
 .bottom-link-todo {
@@ -348,4 +366,143 @@ body {
   border: none;
   cursor: pointer;
   /* Other styles for unedited mode */
+}
+
+.description-display {
+  background-color: #f2f2f2; /* Light grey background, adjust color as needed */
+  padding: 20px; /* Spacing inside the box, adjust as needed */
+  border-radius: 15px; /* Rounded corners, adjust radius as needed */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow for depth */
+  text-align: center; /* Ensure the text is centered within the rounded box */
+}
+
+.detail-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* Adjust the width as needed, or remove for auto-width based on content */
+  width: 100%; /* Or set a specific width like 80%, 500px, etc. */
+  margin: auto; /* Center the box if a specific width is set */
+  /* Add any other styling as needed */
+}
+
+.detail-title {
+  font-size: 24px; /* Example size, adjust as needed */
+  font-weight: bold;
+  text-align: center; /* Centers the text horizontally */
+  /* Additional title styling */
+}
+
+.detail-description{
+  gap: 10px; /* Space between items */
+  padding: 20px; /* Padding inside the box */
+  background-color: #f0f2f5; /* Light background color for the box */
+  border-radius: 15px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: adds a subtle shadow for depth */
+  min-height: 25vh;
+}
+
+.detail-category{
+  display: flex; /* Aligns children (label and input) in a row */
+  align-items: center; /* Centers items vertically */
+  gap: 10px; /* Adds some space between the label and the input */
+}
+
+.color1 {
+  background-color: #44aaaa;
+}
+
+.color1-back {
+  background-color: #44aaaa;
+}
+
+.color2 {
+  color: #f4f1bb;
+}
+
+.color2-back {
+  background-color: #f4f1bb;
+}
+
+.color3 {
+  background-color: #9bc1bc;
+}
+.color4{
+  color: #f2daaa;
+}
+
+.color4-back{
+  background-color: #f2daaa;
+}
+
+.color5{
+  color: #7c3e2b;
+}
+
+.color5-back{
+  background-color: #7c3e2b;
+}
+
+.color6{
+  color: #f7d486;
+}
+
+.color6-back{
+  background-color: #f7d486;
+}
+
+.color7{
+  color: #ce796b;
+}
+
+.color7-back{
+  background-color: #ce796b;
+}
+
+.color8{
+  color: #ecc8af;
+}
+
+.color8-back{
+  background-color: #ecc8af;
+}
+
+.color9{
+  color: #588157;
+}
+
+.color9-back{
+  background-color: #588157;
+}
+
+.color10{
+  color: #dad7cd;
+}
+
+.color10-back{
+  background-color: #dad7cd;
+}
+
+.color11{
+  color: #bee9e8;
+}
+
+.color11-back{
+  background-color: #bee9e8;
+}
+
+.color12{
+  color: #e5989b;
+}
+
+.color12-back{
+  background-color: #e5989b;
+}
+
+.color13{
+  color: #ffd6e0;
+}
+
+.color13-back{
+  background-color: #ffd6e0;
 }

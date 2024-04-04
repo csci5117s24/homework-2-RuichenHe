@@ -60,17 +60,18 @@ function App() {
   };
   return (
     <div>
-        <h1>
-          {category}
-        </h1>
-        <h1>
-            DONE:
-        </h1>
-        {todos && todos.filter(todo => todo.status === "done").filter(todo => todo.userid === userInfo.userId).map(todo => <TodoItem key={todo.title} todo={todo} onStatusChange={handleStatusChange}></TodoItem>)}
+        <div className="todo-section color2-back">
+            <h1 className='color9'>
+              {category} DONE:
+            </h1>
+            {todos && todos.filter(todo => todo.status === "done").filter(todo => todo.userid === userInfo.userId).map(todo => <TodoItem key={todo.title} todo={todo} onStatusChange={handleStatusChange}></TodoItem>)}
+        </div>
         <div className='bottom-button-container'>
           <Link to={`/todos/${category}`} className='bottom-link-todo'>{category} TODO List</Link>
           <Outlet />
         </div>
+
+        
     </div>
   );
   

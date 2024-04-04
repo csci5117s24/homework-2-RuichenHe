@@ -173,42 +173,42 @@ function App() {
   return (
     <div>
       <div className="parent-container">
-        <div className="category-section">
-          <div className="category-form">
-              <h4>
+        <div className="category-section color1">
+          <div className="category-form color2-back">
+              <h4 className="color5">
                 New Category
               </h4>
-              <input value={name} placeholder="New category" onChange={e=>setName(e.target.value)}></input>
+              <input value={name} placeholder="New category" onChange={e=>setName(e.target.value)} className='color5'></input>
               <button onClick={newCategory}>{addCategoryButtonName}</button>
           </div>
-          <h1>
+          <h1 className="color4">
             Category:
           </h1>
           {categories && categories.filter(category => category.userid === userInfo.userId).map(category => <CategoryItem key={category.name} category={category} rootname="/todos/"></CategoryItem>)}
         </div>
-        <div className="todo-section">
-          <div className="todo-form">
-              <h4>
+        <div className="todo-section color2-back">
+          <div className="todo-form color8-back">
+              <h4 className='color7'>
                 New TODO
               </h4>
-              <input value={title} placeholder="New todo" onChange={e=>setTitle(e.target.value)}></input>
+              <input value={title} placeholder="New todo" onChange={e=>setTitle(e.target.value)} className='color7'></input>
               <textarea 
                   value={description} 
                   placeholder="TODO description" 
                   onChange={e => setDescription(e.target.value)}
-                  className="todo-description"
+                  className="todo-description color7"
               ></textarea>
-              <select value = {newTODOCategory} onChange={e=>setNewTODOCategory(e.target.value)}>
-                <option value="">Select a category</option>
+              <select value = {newTODOCategory} onChange={e=>setNewTODOCategory(e.target.value)} className='color7'>
+                <option value="" className='color7'>Select a category</option>
                 {categories.filter(category => category.userid === userInfo.userId).map((category) => (
-                  <option key={category.id} value={category.name}>
+                  <option key={category.id} value={category.name} className='color7'>
                     {category.name}
                   </option>
                 ))}
               </select>
               <button onClick={newTodo}>{addTODOButtonName}</button>
             </div>
-            <h1>
+            <h1 className='color7'>
               TODO:
             </h1>
             {notification.visible && <div className="notification">{notification.message}</div>}

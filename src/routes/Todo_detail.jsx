@@ -1,5 +1,6 @@
 import { useLoaderData } from 'react-router-dom';
 import { useState } from 'react';
+import { Link } from "react-router-dom";
 import '../common/style.css';
 import UserInfoContext from '../UserInfoContext';
 import React, { useContext } from 'react';
@@ -27,6 +28,7 @@ async function loader({ request, params }) {
 
 function TodoDetail() {
   const {todoDetail, categorydata}  = useLoaderData();
+  const [newTodo, setNewTodo] = useState(todoDetail.todo);
   const [newTitle, setNewTitle] = useState(todoDetail.todo.title);
   const [newDescription, setNewDescription] = useState(todoDetail.todo.description);
   const [editStatus, setEditStatus] = useState("false");
@@ -41,10 +43,10 @@ function TodoDetail() {
       setEditStatus("true");
     } else {
       setEditStatus("false");
-      setNewTitle(todoDetail.todo.title);
-      setNewDescription(todoDetail.todo.description);
-      setNewStatus(todoDetail.todo.status);
-      setNewCategory(todoDetail.todo.category[0] || "");
+      setNewTitle(newTodo.title);
+      setNewDescription(newTodo.description);
+      setNewStatus(newTodo.status || newTodo.isDone);
+      setNewCategory(newTodo.category[0] || "");
     }
   }
   async function updateTODOItem() {
@@ -88,6 +90,7 @@ function TodoDetail() {
       }, 3000);
     setUpdateButtonName("Update");
     setEditStatus("false");
+    setNewTodo(newTODOItem);
   }
   async function updateStatus() {
     if (newStatus === "done"){
@@ -99,56 +102,77 @@ function TodoDetail() {
   return (
     
     <div>
-      <div className="todo-form">
-      <div className="input-group">
-        <label htmlFor="titleInput" className="form-label">Title:</label>
-        <input 
-          id="titleInput"
-          value={newTitle} 
-          placeholder="Enter title" 
-          onChange={e => setNewTitle(e.target.value)}
-          className={editStatus === "true" ? 'editableInput' : 'uneditableInput'}
-          readOnly={editStatus !== "true"}
-        />
-      </div>
+      {editStatus === "true"? 
+        <div className={newStatus === "todo" ? "todo-form color8-back" : "todo-form color2-back"}>
+        <div className="input-group ">
+          <label htmlFor="titleInput" className="form-label">Title:</label>
+          <input 
+            id="titleInput"
+            value={newTitle} 
+            placeholder="Enter title" 
+            onChange={e => setNewTitle(e.target.value)}
+            className='editableInput'
+            readOnly={editStatus !== "true"}
+          />
+        </div>
 
-      <div className="textarea-group">
-        <label htmlFor="descriptionTextarea" className="form-label">Description:</label>
-        <textarea 
-          id="descriptionTextarea"
-          value={newDescription}
-          placeholder="Enter description" 
-          onChange={e => setNewDescription(e.target.value)}
-          className={editStatus === "true" ? 'todo-description editableInput' : 'todo-description uneditableInput'}
-          readOnly={editStatus !== "true"}
-        ></textarea>
-      </div>
-      <div className="category-group">
-      <label htmlFor="categoryTextarea" className="form-label">Category:</label>
-      { editStatus !== "true" && <label htmlFor="categoryTextarea" className="form-label">{newCategory}</label>}
-      { editStatus === "true" &&
-        <select value = {newCategory} onChange={e=>setNewCategory(e.target.value)} disabled={editStatus !== "true"} >
-            <option value="">Select a category</option>
-            {categorydata.data.filter(category => category.userid === userInfo.userId).map((category) => (
-              <option key={category.id} value={category.name}>
-                {category.name}
-              </option>
-            ))}
-        </select>}
-      </div>
-      
-      <div className="status-container">
-          <span className={`status-indicator ${newStatus}`}>Status: {newStatus}</span>
-          {editStatus === "true" &&
-          <button onClick={updateStatus} className={`status-btn ${newStatus}`} aria-label={newStatus === "done" ? "Mark as Todo" : "Mark as Done"}>
-              {newStatus === "done" ? <i className="fas fa-undo"></i> : <i className="fas fa-check"></i>}
-              {newStatus === "done" ? "Undo" : "Finish"}
-          </button>}
-      </div>
-        {editStatus === "true" && <button onClick={updateTODOItem}>{updateButtonName}</button>}
-        {editStatus === "false" ? <button onClick={changeEditStatus}>Edit</button> : <button onClick={changeEditStatus}>Cancel</button>}
-        {notification.visible && <div className={notification.nf_type}>{notification.message}</div>}
-      </div>
+        <div className="textarea-group">
+          <label htmlFor="descriptionTextarea" className="form-label">Description:</label>
+          <textarea 
+            id="descriptionTextarea"
+            value={newDescription}
+            placeholder="Enter description" 
+            onChange={e => setNewDescription(e.target.value)}
+            className='todo-description editableInput'
+            readOnly={editStatus !== "true"}
+          ></textarea>
+        </div>
+        <div className="category-group">
+        <label htmlFor="categoryTextarea" className="form-label">Category:</label>
+          <select value = {newCategory} onChange={e=>setNewCategory(e.target.value)} disabled={editStatus !== "true"} >
+              <option value="">Select a category</option>
+              {categorydata.data.filter(category => category.userid === userInfo.userId).map((category) => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+          </select>
+        </div>
+        
+        <div className="status-container">
+            <span className={`status-indicator ${newStatus}`}>Status: {newStatus}</span>
+            <button onClick={updateStatus} className={`status-btn ${newStatus}`} aria-label={newStatus === "done" ? "Mark as Todo" : "Mark as Done"}>
+                {newStatus === "done" ? <i className="fas fa-undo"></i> : <i className="fas fa-check"></i>}
+                {newStatus === "done" ? "Undo" : "Finish"}
+            </button>
+        </div>
+          <button onClick={updateTODOItem}>{updateButtonName}</button>
+          <button onClick={changeEditStatus}>Cancel</button>
+          {notification.visible && <div className={notification.nf_type}>{notification.message}</div>}
+        </div>
+        : 
+        <div className={newStatus === "todo" ? "todo-form color8-back" : "todo-form color2-back"}>
+        <div className="detail-group">
+          <text className={newStatus === "todo" ? 'detail-title color7' : 'detail-title color9'}>
+            {newTitle} 
+          </text>
+          <text className={newStatus === "todo" ? 'detail-description color13 color12-back' : 'detail-description color9 color11-back'}>
+          {newDescription}
+          </text>
+          <div className="detail-category">
+            { editStatus !== "true" && newStatus === "done" && <Link to={"/done/" + newCategory} className="category-link form-label uneditableInput description-display color5-back color4">{newCategory}</Link>}
+            { editStatus !== "true" && newStatus !== "done" && <Link to={"/todos/" + newCategory} className="category-link form-label uneditableInput description-display color5-back color4">{newCategory}</Link>}
+          </div>
+        </div>
+        
+        
+        <div className="status-container">
+            <span className={`status-indicator ${newStatus}`}>Status: {newStatus}</span>
+        </div>
+          <button onClick={changeEditStatus}>Edit</button>
+          {notification.visible && <div className={notification.nf_type}>{notification.message}</div>}
+        </div>
+        }
     </div>
 
   );

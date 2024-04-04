@@ -107,31 +107,31 @@ function App() {
   };
   return (
     <div>
-        <h1>
-          {category}
-        </h1>
-        <div className="todo-form">
-          <h4>
-            New TODO
-          </h4>
-          <input value={title} placeholder="New todo" onChange={e=>setTitle(e.target.value)}></input>
-          <textarea 
-              value={description} 
-              placeholder="TODO description" 
-              onChange={e => setDescription(e.target.value)}
-              className="todo-description"
-          ></textarea>
-          <button onClick={newTodo}>{addTODOButtonName}</button>
+        <div className="todo-section color2-back">
+          <div className="todo-form color8-back">
+            <h4 className='color7'>
+              New TODO
+            </h4>
+            <input value={title} placeholder="New todo" onChange={e=>setTitle(e.target.value)} className='color7'></input>
+            <textarea 
+                value={description} 
+                placeholder="TODO description" 
+                onChange={e => setDescription(e.target.value)}
+                className="todo-description"
+            ></textarea>
+            <button onClick={newTodo}>{addTODOButtonName}</button>
+          </div>
+          {notification.visible && <div className="notification">{notification.message}</div>}
+          <h1>
+             {category} TODO:
+          </h1>
+          {todos && todos.filter(todo => todo.status === "todo").filter(todo => todo.userid === userInfo.userId).map(todo => <TodoItem key={todo.title} todo={todo} onStatusChange={handleStatusChange}></TodoItem>)}
         </div>
-        {notification.visible && <div className="notification">{notification.message}</div>}
-        <h1>
-          TODO:
-        </h1>
-        {todos && todos.filter(todo => todo.status === "todo").filter(todo => todo.userid === userInfo.userId).map(todo => <TodoItem key={todo.title} todo={todo} onStatusChange={handleStatusChange}></TodoItem>)}
         <div className='bottom-button-container'>
           <Link to={`/done/${category}`} className='bottom-link-done'>{category} DONE List</Link>
           <Outlet />
         </div>
+        
     </div>
     
   );

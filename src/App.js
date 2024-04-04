@@ -25,14 +25,16 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <div className="top-bar">
-        <div className='home-head'>
-        {userInfo && <Link to="/todos">{userInfo.userDetails}'s TODO List</Link>}
+    <div className="App color4-back">
+      <div className="top-bar color6-back">
+        <div className='home-head color1-back'>
+        {userInfo && <Link to="/todos" className='color4 nodecoration'>{userInfo.userDetails}'s TODO List</Link>}
+        {!userInfo && <text className='color4 nodecoration'>TODO List</text>}
         </div>
         <div className='bottom-buttons'>
           <div className='bottom-button-container'>
           {userInfo && <Link to="/todos" className='bottom-link-todo'>TODO List</Link>}
+          {!userInfo && <a href="/.auth/login/github?post_login_redirect_uri=/todos" className='bottom-link-todo'>Login</a>}
           </div>
           <div className='bottom-button-container'>
           {userInfo && <Link to="/done" className='bottom-link-done'>DONE List</Link>}
@@ -42,8 +44,6 @@ function App() {
           </div>
         </div>
       </div>
-      {!userInfo && <a href="/.auth/login/github?post_login_redirect_uri=/todos">Login</a>}
-      
       <Outlet />
     </div>
   );

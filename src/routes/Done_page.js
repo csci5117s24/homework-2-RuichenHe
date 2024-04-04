@@ -65,14 +65,14 @@ function App() {
   return (
     <div>
       <div className="parent-container">
-        <div className="category-section">
-          <h1>
+        <div className="category-section color1">
+          <h1 className="color4">
             Category:
           </h1>
           {categories && categories.filter(category => category.userid === userInfo.userId).map(category => <CategoryItem key={category.name} category={category} rootname="/done/"></CategoryItem>)}
         </div>
-        <div className="todo-section">
-            <h1>
+        <div className="todo-section color2-back">
+            <h1 className='color9'>
               DONE:
             </h1>
             {todos && todos.filter(todo => todo.userid === userInfo.userId).filter(todo => todo.status === "done").map(todo => <TodoItem key={todo.title} todo={todo} onStatusChange={handleStatusChange}></TodoItem>)}
