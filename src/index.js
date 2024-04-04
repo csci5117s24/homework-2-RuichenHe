@@ -13,8 +13,10 @@ import { TODO_detail } from './routes/Todo_detail'
 import { Done_Page } from './routes/Done_page'
 import { Todo_Filtered_Page } from './routes/Todo_filter'
 import { Done_Filtered_Page } from './routes/Done_filter'
-import UserInfoProvider from './UserInfoProvider';
+import UserInfoProvider from './UserInfoProvider'
+import NotFound from './routes/Not_found'
 // create the router -- paths are configured here
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -24,9 +26,9 @@ const router = createBrowserRouter([
       TODO_detail,
       Done_Page,
       Todo_Filtered_Page,
-      Done_Filtered_Page
+      Done_Filtered_Page,
     ],
-    errorElement: <span>oops</span>
+    errorElement: <NotFound/>
   },
   
 ]);
