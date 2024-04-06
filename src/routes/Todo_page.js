@@ -121,6 +121,8 @@ function App() {
       setSelectedDate("");
 
       // A small test for push notification
+      //Based on the test, this notification implementation only wokrs on macbook safari.
+      //Fail to create notification on Windows Edge, any browser on iphone, and Macbook Chrome.
       console.log(newlyAddedTODO)
       addNotification({
         title: 'New TODo item created',
