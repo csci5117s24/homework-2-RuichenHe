@@ -33,7 +33,7 @@ function App() {
   const status = "todo";
   const [addTODOButtonName, setAddTodoButtonName] = useState("Add TODO")
   const [notification, setNotification] = useState({ message: '', visible: false });
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState("");
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -55,6 +55,18 @@ function App() {
       }, 3000); // Hides the notification after 3 seconds
       setAddTodoButtonName("Add TODO");
       return; // Exit the function
+    }
+    try {
+      if (selectedDate.trim() === ""){
+        setNotification({ message: 'Deadline date is required.', visible: true });
+        setTimeout(() => {
+            setNotification({ message: '', visible: false });
+        }, 3000); // Hides the notification after 3 seconds
+        setAddTodoButtonName("Add TODO");
+        return; // Exit the function
+      }
+    } catch (error) {
+      console.error("Error fetching todo item:", error);
     }
     const formattedDate = selectedDate.toISOString();
     const newTodo = {
@@ -81,6 +93,7 @@ function App() {
       }
       setTitle("");
       setDescription("");
+      setSelectedDate("");
     }
     setAddTodoButtonName("Add TODO");
   }
@@ -127,7 +140,7 @@ function App() {
                 onChange={e => setDescription(e.target.value)}
                 className="todo-description"
             ></textarea>
-            <DatePicker selected={selectedDate} onChange={handleDateChange}/>
+            <DatePicker selected={selectedDate} onChange={handleDateChange} placeholderText="Set the deadline here"/>
             <button onClick={newTodo}>{addTODOButtonName}</button>
           </div>
           {notification.visible && <div className="notification">{notification.message}</div>}
