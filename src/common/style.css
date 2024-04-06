@@ -23,6 +23,8 @@
     margin: 10px auto 10px auto;
     background-color: #f9f9f9; /* Background color */
     width: 75%;
+    display: flex; /* Aligns the checkbox and link horizontally */
+    align-items: center; /* Centers them vertically */
 }
 
 .category-link {
@@ -406,6 +408,20 @@ body {
   display: flex; /* Aligns children (label and input) in a row */
   align-items: center; /* Centers items vertically */
   gap: 10px; /* Adds some space between the label and the input */
+}
+
+.delete-icon {
+  display: inline-block;
+  margin-right: 10px; /* Space between the delete icon and the link */
+  cursor: pointer; /* Change the cursor to indicate clickability */
+  border: 1px solid #ccc; /* Border for the circle */
+  border-radius: 50%; /* Make the border round */
+  width: 20px; /* Width of the circle */
+  height: 20px; /* Height of the circle */
+  text-align: center; /* Center the "×" character horizontally */
+  line-height: 20px; /* Center the "×" character vertically */
+  background-color: #f9f9f9; /* Background color of the circle */
+  color: #333; /* Color of the "×" character */
 }
 
 .color1 {

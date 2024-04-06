@@ -68,11 +68,12 @@ app.http('updateTODO', {
         const status = body.isDone ?? "todo"
         const category = body.category ?? []
         const userid = body.userID ?? ""
+        const deadline = body.deadline ?? Date().toISOString()
         
         if (ObjectId.isValid(id)) {
             const client = await mongoClient.connect(process.env.AZURE_MONGO_DB)
             // this could not possibly be the fast way to do things.
-            const result = await client.db("test").collection("todos").updateOne({_id: new ObjectId(id)}, {$set: {title, description, status, category, userid}})
+            const result = await client.db("test").collection("todos").updateOne({_id: new ObjectId(id)}, {$set: {title, description, status, category, userid, deadline}})
             
 
             // //Update category collections based on category input
@@ -113,7 +114,8 @@ app.http('newTODO', {
         const status = body.isDone ?? "todo"
         const category = body.category ?? []
         const userid = body.userID ?? ""
-        const payload = {title, description, status, category, userid}
+        const deadline = body.deadline ?? Date().toISOString()
+        const payload = {title, description, status, category, userid, deadline}
         const result = await client.db("test").collection("todos").insertOne(payload)
 
         // //Update category collections based on category input
@@ -130,7 +132,7 @@ app.http('newTODO', {
         client.close();
         return{
             status: 201, /* Defaults to 200 */
-            jsonBody: {_id: result.insertedId, title, description, status, category, userid}
+            jsonBody: {_id: result.insertedId, title, description, status, category, deadline, userid}
         };
     },
 });
@@ -205,12 +207,20 @@ app.http('deleteCategory', {
     handler: async (request, context) => {
         const client = await mongoClient.connect(process.env.AZURE_MONGO_DB);
         const category = request.params.name;
-
         //FIrst delete the category from the collection
-        const categoryResult = await client.db("test").collection("categories").deleteOne({name: category});
+        const auth_header = request.headers.get('X-MS-CLIENT-PRINCIPAL');
+        let token = {
+            userid: "",
+        };
+        if (auth_header) {
+            token = Buffer.from(auth_header, "base64");
+            token = JSON.parse(token.toString());
+        }
+
+        const categoryResult = await client.db("test").collection("categories").deleteOne({name: category, userid: token.userId});
         if (categoryResult.deletedCount === 1){
             await client.db("test").collection("todos").updateMany(
-                {category: category},
+                {category: category, userid: token.userId},
                 {$pull: {category: category}}
             );
             client.close()

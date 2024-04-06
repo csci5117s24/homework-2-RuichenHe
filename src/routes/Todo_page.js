@@ -5,6 +5,10 @@ import '../common/style.css';
 import React, { useContext } from 'react';
 import UserInfoContext from '../UserInfoContext';
 import { useLoaderData } from 'react-router-dom';
+
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+
 async function loader({ request }) {
     const todoRequest = fetch("/api/todos", {
         signal: request.signal,
@@ -47,6 +51,12 @@ function App() {
   // eslint-disable-next-line
   const [newTODOCategory, setNewTODOCategory] = useState("");
   const status = "todo";
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  }
   
 
   async function newTodo() {
@@ -66,11 +76,13 @@ function App() {
       setAddTodoButtonName("Add TODO");
       return; // Exit the function
     }
-
+    const formattedDate = selectedDate.toISOString();
+    console.log(selectedDate);
     const newTodo = {
       title: title, 
       description: description, 
       status: status, 
+      deadline: formattedDate,
       userID: userInfo.userId,
       category: newTODOCategory.trim() === "" ? [] : [newTODOCategory]
     }
@@ -137,6 +149,30 @@ function App() {
     setAddCategoryButtonName("Add Category");
   }
 
+  const handleCategoryDelete = async (categoryName) => {
+    const userConfirmed = window.confirm("Are you sure you want to delete category: " + categoryName);
+    if (userConfirmed) {
+      console.log("process");
+      setNotification({ message: 'Deleting category in progress...', visible: true });
+
+      await fetch("/api/category/"+categoryName, {
+          method: "DELETE",
+          headers: {
+              "Content-Type": "application/json",
+          }
+      })
+      
+      setCategories(categories.filter(category => category.name !== categoryName));
+
+      setNotification({ message: 'Category deleted!', visible: true });
+      setTimeout(() => {
+          setNotification({ message: '', visible: false });
+      }, 3000); // Hides the notification after 3 seconds
+    } else {
+      console.log(categoryName);
+    }
+    
+  }
 
   const handleStatusChange = async (todoid, newStatus) => {
       try {
@@ -149,11 +185,7 @@ function App() {
           });
           if (response.ok) {
               const todoItem = await response.json(); // Parse the JSON response body
-              console.log(todoItem.todo.title); // Log the todo item for debugging
-              console.log(newStatus);
-              console.log(userInfo.userId);
-              console.log(todoItem.todo);
-              const newTODOItem = {title: todoItem.todo.title, description: todoItem.todo.description, isDone: newStatus, category: todoItem.todo.category, userID: userInfo.userId};
+              const newTODOItem = {title: todoItem.todo.title, description: todoItem.todo.description, isDone: newStatus, category: todoItem.todo.category, userID: userInfo.userId, deadline:todoItem.todo.deadline};
               fetch("/api/todo/"+todoid, {
                   method: "PUT",
                   headers: {
@@ -170,6 +202,7 @@ function App() {
       }
   };
 
+
   return (
     <div>
       <div className="parent-container">
@@ -184,7 +217,7 @@ function App() {
           <h1 className="color4">
             Category:
           </h1>
-          {categories && categories.filter(category => category.userid === userInfo.userId).map(category => <CategoryItem key={category.name} category={category} rootname="/todos/"></CategoryItem>)}
+          {categories && categories.filter(category => category.userid === userInfo.userId).map(category => <CategoryItem key={category.name} category={category} rootname="/todos/" isShown = "yes" onDeleteButtonClick = {handleCategoryDelete} ></CategoryItem>)}
         </div>
         <div className="todo-section color2-back">
           <div className="todo-form color8-back">
@@ -198,6 +231,7 @@ function App() {
                   onChange={e => setDescription(e.target.value)}
                   className="todo-description color7"
               ></textarea>
+              <DatePicker selected={selectedDate} onChange={handleDateChange}/>
               <select value = {newTODOCategory} onChange={e=>setNewTODOCategory(e.target.value)} className='color7'>
                 <option value="" className='color7'>Select a category</option>
                 {categories.filter(category => category.userid === userInfo.userId).map((category) => (

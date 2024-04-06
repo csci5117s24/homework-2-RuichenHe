@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import '../common/style.css';
 import UserInfoContext from '../UserInfoContext';
 import React, { useContext } from 'react';
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 async function loader({ request, params }) {
   const { id } = params;
 
@@ -34,9 +36,13 @@ function TodoDetail() {
   const [editStatus, setEditStatus] = useState("false");
   const [newStatus, setNewStatus] = useState(todoDetail.todo.status);
   const [newCategory, setNewCategory] = useState(todoDetail.todo.category[0] || "");
+  const [newDate, setNewDate] = useState(new Date(todoDetail.todo.deadline) || new Date());
   const [updateButtonName, setUpdateButtonName] = useState("Update")
   const [notification, setNotification] = useState({ message: '', visible: false, nf_type: "notification-success"});
   const userInfo = useContext(UserInfoContext);
+  const handleDateChange = (date) => {
+    setNewDate(date);
+  }
   async function changeEditStatus(){
     console.log("Switch edit status");
     if (editStatus === "false"){
@@ -47,6 +53,7 @@ function TodoDetail() {
       setNewDescription(newTodo.description);
       setNewStatus(newTodo.status || newTodo.isDone);
       setNewCategory(newTodo.category[0] || "");
+      setNewDate(Date(newTodo.deadline));
     }
   }
   async function updateTODOItem() {
@@ -68,12 +75,15 @@ function TodoDetail() {
       setNewDescription(todoDetail.todo.description)
       return; // Exit the function
     }
+    const formattedDate = newDate.toISOString();
     const newTODOItem = {
       title: newTitle, 
       description: newDescription, 
       isDone: newStatus, 
       userID: userInfo.userId,
+      deadline: formattedDate,
       category: newCategory.trim() === "" ? [] : [newCategory]
+
     }
     setNewTitle(newTitle)
     setNewDescription(newDescription)
@@ -127,6 +137,11 @@ function TodoDetail() {
             readOnly={editStatus !== "true"}
           ></textarea>
         </div>
+        <div className="input-group">
+          <label htmlFor="titleInput" className="form-label">Date:</label>
+          <DatePicker selected={newDate} onChange={handleDateChange}/>
+        </div>
+        
         <div className="category-group">
         <label htmlFor="categoryTextarea" className="form-label">Category:</label>
           <select value = {newCategory} onChange={e=>setNewCategory(e.target.value)} disabled={editStatus !== "true"} >
@@ -159,9 +174,12 @@ function TodoDetail() {
           <text className={newStatus === "todo" ? 'detail-description color13 color12-back' : 'detail-description color9 color11-back'}>
           {newDescription}
           </text>
+          <text className={newStatus === "todo" ? 'detail-title color7' : 'detail-title color9'}>
+            Deadline: {newDate.toISOString().split(' ').slice(0,4).join(' ')}
+          </text>
           <div className="detail-category">
-            { editStatus !== "true" && newStatus === "done" && <Link to={"/done/" + newCategory} className="category-link form-label uneditableInput description-display color5-back color4">{newCategory}</Link>}
-            { editStatus !== "true" && newStatus !== "done" && <Link to={"/todos/" + newCategory} className="category-link form-label uneditableInput description-display color5-back color4">{newCategory}</Link>}
+              {newCategory !== "" && editStatus !== "true" && newStatus === "done" && <Link to={"/done/" + newCategory} className="category-link form-label uneditableInput description-display color5-back color4">{newCategory}</Link>}
+              {newCategory !== "" && editStatus !== "true" && newStatus !== "done" && <Link to={"/todos/" + newCategory} className="category-link form-label uneditableInput description-display color5-back color4">{newCategory}</Link>}
           </div>
         </div>
         

@@ -5,6 +5,8 @@ import { Link, Outlet } from 'react-router-dom';
 import '../common/style.css';
 import React, { useContext } from 'react';
 import UserInfoContext from '../UserInfoContext';
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 async function loader({ request, params }) {
   const { category } = params;
@@ -31,8 +33,12 @@ function App() {
   const status = "todo";
   const [addTODOButtonName, setAddTodoButtonName] = useState("Add TODO")
   const [notification, setNotification] = useState({ message: '', visible: false });
-  console.log("Category");
-  console.log(category);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  }
+
   async function newTodo() {
     setAddTodoButtonName("Waiting");
     if (title.trim() === "") {
@@ -50,11 +56,13 @@ function App() {
       setAddTodoButtonName("Add TODO");
       return; // Exit the function
     }
+    const formattedDate = selectedDate.toISOString();
     const newTodo = {
       title: title, 
       description: description, 
       status: status,
       userID: userInfo.userId,
+      deadline: formattedDate,
       category: [category]
     }
 
@@ -89,7 +97,7 @@ function App() {
               const todoItem = await response.json(); // Parse the JSON response body
               console.log(todoItem.todo.title); // Log the todo item for debugging
               console.log(newStatus);
-              const newTODOItem = {title: todoItem.todo.title, description: todoItem.todo.description, isDone: newStatus, category: todoItem.todo.category, userID: userInfo.userId}
+              const newTODOItem = {title: todoItem.todo.title, description: todoItem.todo.description, isDone: newStatus, category: todoItem.todo.category, userID: userInfo.userId, deadline:todoItem.todo.deadline}
               fetch("/api/todo/"+todoid, {
                   method: "PUT",
                   headers: {
@@ -119,6 +127,7 @@ function App() {
                 onChange={e => setDescription(e.target.value)}
                 className="todo-description"
             ></textarea>
+            <DatePicker selected={selectedDate} onChange={handleDateChange}/>
             <button onClick={newTodo}>{addTODOButtonName}</button>
           </div>
           {notification.visible && <div className="notification">{notification.message}</div>}
