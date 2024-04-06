@@ -9,6 +9,8 @@ import { useLoaderData } from 'react-router-dom';
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
+import addNotification from 'react-push-notification';
+
 async function loader({ request }) {
     const todoRequest = fetch("/api/todos", {
         signal: request.signal,
@@ -107,15 +109,27 @@ function App() {
       body: JSON.stringify(newTodo)
     })
     if (result.ok) {
+      const newlyAddedTODO = await result.json();
       if (todos){
-        setTODOs([...todos, await result.json()]);
+        setTODOs([...todos, newlyAddedTODO]);
       } else {
-        setTODOs([await result.json()]);
+        setTODOs([newlyAddedTODO]);
       }
       setTitle("");
       setDescription("");
       setNewTODOCategory("");
       setSelectedDate("");
+
+      // A small test for push notification
+      console.log(newlyAddedTODO)
+      addNotification({
+        title: 'New TODo item created',
+        message: 'click to visit/modify',
+        duration: 5000,
+        native: true,
+        onClick: () => window.location = "/todo/" + newlyAddedTODO._id,
+      });
+
     }
     setAddTodoButtonName("Added");
     const coin = await fetch("/api/coin", {
