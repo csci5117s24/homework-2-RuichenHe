@@ -52,7 +52,7 @@ function App() {
   const [newTODOCategory, setNewTODOCategory] = useState("");
   const status = "todo";
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState("");
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -75,6 +75,18 @@ function App() {
       }, 3000); // Hides the notification after 3 seconds
       setAddTodoButtonName("Add TODO");
       return; // Exit the function
+    } 
+    try {
+      if (selectedDate.trim() === ""){
+        setNotification({ message: 'Deadline date is required.', visible: true });
+        setTimeout(() => {
+            setNotification({ message: '', visible: false });
+        }, 3000); // Hides the notification after 3 seconds
+        setAddTodoButtonName("Add TODO");
+        return; // Exit the function
+      }
+    } catch (error) {
+      console.error("Error fetching todo item:", error);
     }
     const formattedDate = selectedDate.toISOString();
     console.log(selectedDate);
@@ -103,6 +115,7 @@ function App() {
       setTitle("");
       setDescription("");
       setNewTODOCategory("");
+      setSelectedDate("");
     }
     setAddTodoButtonName("Added");
     const coin = await fetch("/api/coin", {
@@ -231,7 +244,7 @@ function App() {
                   onChange={e => setDescription(e.target.value)}
                   className="todo-description color7"
               ></textarea>
-              <DatePicker selected={selectedDate} onChange={handleDateChange}/>
+              <DatePicker selected={selectedDate} onChange={handleDateChange} placeholderText="Set the deadline here"/>
               <select value = {newTODOCategory} onChange={e=>setNewTODOCategory(e.target.value)} className='color7'>
                 <option value="" className='color7'>Select a category</option>
                 {categories.filter(category => category.userid === userInfo.userId).map((category) => (
