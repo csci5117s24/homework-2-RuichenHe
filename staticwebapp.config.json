@@ -19,7 +19,24 @@
         {
             "route": "/done/*",
             "allowedRoles": ["authenticated"]
+        },
+        {
+            "route": "/api/todos",
+            "allowedRoles": ["authenticated"]
+        },
+        {
+            "route": "/api/categories",
+            "allowedRoles": ["authenticated"]
+        },
+        {
+            "route": "/api/todo/*",
+            "allowedRoles": ["authenticated"]
+        },
+        {
+            "route": "/api/todos/*",
+            "allowedRoles": ["authenticated"]
         }
+
       ],
 
     "navigationFallback": {
