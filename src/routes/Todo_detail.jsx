@@ -48,12 +48,13 @@ function TodoDetail() {
     if (editStatus === "false"){
       setEditStatus("true");
     } else {
+      console.log("here");
       setEditStatus("false");
       setNewTitle(newTodo.title);
       setNewDescription(newTodo.description);
       setNewStatus(newTodo.status || newTodo.isDone);
       setNewCategory(newTodo.category[0] || "");
-      setNewDate(Date(newTodo.deadline));
+      setNewDate(new Date(newTodo.deadline) || newTodo.deadline);
     }
   }
   async function updateTODOItem() {
