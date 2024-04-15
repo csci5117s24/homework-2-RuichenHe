@@ -9,11 +9,25 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
 async function loader({ request, params }) {
+  const allCategory = await fetch("/api/categories", {
+    signal: request.signal,
+    method: "GET",
+    headers: {
+      'userid': "",
+    }
+  });
+ 
+  const categoryList = await allCategory.json();
+
   const { category } = params;
+  if (categoryList.data.some(cat => cat.name === category) !== true){
+    throw new Response("ERROR");
+  }
   const result = await fetch("/api/todos/"+category, {
     signal: request.signal,
     method: "get",
   });
+  console.log(result);
   if (result.ok) {
     const todosList = await result.json();
     return { todosList, category };

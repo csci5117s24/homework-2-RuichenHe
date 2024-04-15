@@ -26,7 +26,6 @@ app.http('getTODOs', {
                 jsonBody: {data: todos.reverse()}
             }
         }
-        
     },
 });
 

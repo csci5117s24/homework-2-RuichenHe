@@ -1,30 +1,45 @@
 import './App.css';
 import './common/style.css'
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate} from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
 function App() {
   const [userInfo, setUserInfo] = useState();
+  const [loading, setLoading] = useState(true); // Added loading state
+  const navigate = useNavigate();
   useEffect(() => {
     (async () => {
-      setUserInfo(await getUserInfo());
+      try {
+        const userInfo = await getUserInfo();
+        setUserInfo(userInfo);
+        if (userInfo) {
+          navigate('/todos', { replace: true }); // Use replace to avoid navigation back to '/'
+        }
+      } catch (error) {
+        console.error('No profile could be found');
+      } finally {
+        setLoading(false); // Ensure loading is set to false after all operations
+      }
     })();
-  }, []);
+  }, [navigate]);
 
   async function getUserInfo() {
     try {
       const response = await fetch('/.auth/me');
       const payload = await response.json();
-      const { clientPrincipal } = payload;
-      //console.log(clientPrincipal)
-      return clientPrincipal;
+      return payload.clientPrincipal;
     } catch (error) {
-      console.error('No profile could be found');
-      return undefined;
+      console.error('Error fetching user info:', error);
+      throw error; // Rethrow error to be caught in useEffect
     }
   }
 
+  if (loading) {
+    return <div>Loading...</div>; // Show loading message or spinner
+  }
+  
   return (
+    
     <div className="App color4-back">
       <div className="top-bar color6-back">
         <div className='home-head color1-back'>

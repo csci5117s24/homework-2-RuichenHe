@@ -7,7 +7,20 @@ import React, { useContext } from 'react';
 import UserInfoContext from '../UserInfoContext';
 
 async function loader({ request, params }) {
+  const allCategory = await fetch("/api/categories", {
+    signal: request.signal,
+    method: "GET",
+    headers: {
+      'userid': "",
+    }
+  });
+  
+  const categoryList = await allCategory.json();
+
   const { category } = params;
+  if (categoryList.data.some(cat => cat.name === category) !== true){
+    throw new Response("ERROR");
+  }
   const result = await fetch("/api/todos/"+category, {
     signal: request.signal,
     method: "get",
