@@ -87,7 +87,7 @@ function App() {
     })
     if (result.ok) {
       if (todos){
-        setTODOs([...todos, await result.json()]);
+        setTODOs([await result.json(), ...todos]);
       } else {
         setTODOs([await result.json()]);
       }

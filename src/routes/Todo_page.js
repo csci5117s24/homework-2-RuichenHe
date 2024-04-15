@@ -111,7 +111,7 @@ function App() {
     if (result.ok) {
       const newlyAddedTODO = await result.json();
       if (todos){
-        setTODOs([...todos, newlyAddedTODO]);
+        setTODOs([newlyAddedTODO, ...todos]);
       } else {
         setTODOs([newlyAddedTODO]);
       }
@@ -169,7 +169,7 @@ function App() {
     })
     if (result.ok) {
       if (categories){
-        setCategories([...categories, await result.json()]);
+        setCategories([await result.json(), ...categories]);
       } else {
         setCategories([await result.json()]);
       }

@@ -19,11 +19,11 @@ app.http('getTODOs', {
             token = JSON.parse(token.toString());
             console.log(token.userId)
             return {
-                jsonBody: {data: todos.filter(todo => todo.userid === token.userId)}
+                jsonBody: {data: todos.filter(todo => todo.userid === token.userId).reverse()}
             }
         } else {
             return {
-                jsonBody: {data: todos}
+                jsonBody: {data: todos.reverse()}
             }
         }
         
@@ -151,11 +151,11 @@ app.http('getCategories', {
             token = Buffer.from(auth_header, "base64");
             token = JSON.parse(token.toString());
             return {
-                jsonBody: {data: categories.filter(category => category.userid === token.userId)}
+                jsonBody: {data: categories.filter(category => category.userid === token.userId).reverse()}
             }
         } else {
             return {
-                jsonBody: {data: categories}
+                jsonBody: {data: categories.reverse()}
             }
         }
     },
@@ -260,12 +260,12 @@ app.http('getTODOsByCategory', {
                 token = JSON.parse(token.toString());
                 return {
                     statis: 200,
-                    jsonBody: {data: todos.filter(todo => todo.userid === token.userId)}
+                    jsonBody: {data: todos.filter(todo => todo.userid === token.userId).reverse()}
                 };
             } else {
                 return {
                     statis: 200,
-                    jsonBody: {data: todos}
+                    jsonBody: {data: todos.reverse()}
                 };
             }
             
