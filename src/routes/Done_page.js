@@ -34,29 +34,27 @@ function App() {
   const userInfo = useContext(UserInfoContext);
   const handleStatusChange = async (todoid, newStatus) => {
     try {
-        const url = "/api/todo/" + todoid;
-        const response = await fetch(url, {
-            method: 'GET', // HTTP method
-            headers: {
-                'Content-Type': 'application/json', // Assuming JSON response
-            },
-        });
-        if (response.ok) {
-            const todoItem = await response.json(); // Parse the JSON response body
-            console.log(todoItem.todo.title); // Log the todo item for debugging
-            console.log(newStatus);
-            const newTODOItem = {title: todoItem.todo.title, description: todoItem.todo.description, isDone: newStatus, category: todoItem.todo.category, userID: userInfo.userId}
-            fetch("/api/todo/"+todoid, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(newTODOItem)
-            })
-            setTODOs(todos.filter(todo => todo._id !== todoid));
-        } else {
-            console.error("Failed to fetch todo item with id:", todoid);
-        }
+      const url = "/api/todo/" + todoid;
+      const response = await fetch(url, {
+          method: 'GET', // HTTP method
+          headers: {
+              'Content-Type': 'application/json', // Assuming JSON response
+          },
+      });
+      if (response.ok) {
+          const todoItem = await response.json(); // Parse the JSON response body
+          const newTODOItem = {title: todoItem.todo.title, description: todoItem.todo.description, isDone: newStatus, category: todoItem.todo.category, userID: userInfo.userId, deadline:todoItem.todo.deadline};
+          fetch("/api/todo/"+todoid, {
+              method: "PUT",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify(newTODOItem)
+          })
+          setTODOs(todos.filter(todo => todo._id !== todoid));
+      } else {
+          console.error("Failed to fetch todo item with id:", todoid);
+      }
     } catch (error) {
         console.error("Error fetching todo item:", error);
     }
